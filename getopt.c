@@ -25,9 +25,11 @@ int main(int argc, char **argv)
 	int sock = 0, valread;
 	struct sockaddr_in serv_addr;
     char buffer[1024] = {0};
+    char hello[] = "";
+
  //   char  hello[] = "GET / HTTP/1.1\r\nHost:www.google.com\r\n\r\n";
 
-	while((option_val =getopt(argc,argv,"n:c:f:e")))
+	while((option_val =getopt(argc,argv,"n:c:u:f:d:G:a:e"))!= -1)
 	{
 		switch(option_val)
 		{
@@ -38,20 +40,77 @@ int main(int argc, char **argv)
 			    	for (i=0; i <counter;++i)
 			    	printf("Hello world\n");
 				break;
-				case'c':
+			case'c':
 				    if (argc < 2 ) {
 				        printf("Please give hostname as arg\n");
 				        exit(0);
 				    }
 				    if(optarg != NULL)
 				   // char ab[] =optarg;
-	                char hello[] = "";
-	                sprintf(hello,"GET / HTTP/1.1\r\nHost:%s\r\n\r\n",argv[2]);
+	                
+	                sprintf(hello,"GET / HTTP/1.1\r\nHost:%s\r\n\r\n",optarg);
 	                //char hello1[] = "\r\n\r\n";
 	                //strcat(hello, hello1);
+				/*	if(optopt =='u'){
+					sprintf(hello,"GET /%s HTTP/1.1\r\nHost:%s\r\n\r\n",argv[4],argv[2]);
+					}*/
+
+				break;
+			case'u': 
+				sprintf(hello,"GET /~%s HTTP/1.1\r\nHost:%s\r\n\r\n",argv[4],argv[2]);
+			//	sprintf(hello,"GET /~%s HTTP/1.1\r\n",optarg);
+				break;
+			case 'a': 
+			sprintf(hello,"GET / HTTP/1.1\r\nHost:%s\r\nUser-Agent:%s\r\n\r\n",argv[2],argv[4]);
+				break;
+			case'f':
+				if((file = fopen(optarg,"r")))
+				{
+					while(fgets(string,sizeof(string),file))
+					{
+						printf("%s\n",string);
+					}
+				}
+				break;
+				
+			case'?':
+
+				if ((optopt == 'c')&& (optopt == 'a'))
+				{
+				sprintf(hello,"GET / HTTP/1.1\r\nHost:%s\r\nUser-Agent:%s\r\n\r\n",optarg,optarg);
+                }
+                else
+				
+				break;
+			case'd':
+				if(optarg != NULL)
+				
+				 sprintf(hello, "POST /~devrim/test.php HTTP/1.1\r\nHost:db.ciu.edu.tr\r\n\r\n%s&%s\r\n",optarg,optarg);
+				/*Curl method*/
+		    	/*char *data="name=daniel&project=curl";
+                curl_easy_setopt(easyhandle, CURLOPT_POSTFIELDS, data);
+                curl_easy_setopt(easyhandle, CURLOPT_URL, "http://db.ciu.edu.tr/~devrim/test.php/");
+                curl_easy_perform(easyhandle); /* post away! */
+				break;
+			case'G':
+				if(optarg != NULL)
+				sprintf(hello,"GET /~devrim/test.php?%s&%s HTTP/1.1\r\nHost:db.ciu.edu.tr\r\n\r\n",optarg,optarg);
+				break;
+			case'e':
+				srand((unsigned) time(&t));
+				rand_num = rand()%100;
+				if(rand_num%2 !=0)
+				    rand_num +=1;
+				printf("%d\n",rand_num);
+				break;
+			default:
+			//	printf("You chose wrong");
+				return 0;
+		}
+	}
 
 
-				    if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0)
+		           	if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0)
 				    {
 				        printf("\n Socket creation error \n");
 				        return -1;
@@ -71,27 +130,8 @@ int main(int argc, char **argv)
 				    printf("Message sent \n%s",hello);
 				    valread = read( sock , buffer, 1024);
 				    printf("%s\n",buffer );
-				break;
-			case'f':
-				if((file = fopen(optarg,"r")))
-				{
-					while(fgets(string,sizeof(string),file))
-					{
-						printf("%s\n",string);
-					}
-				}
-				break;
-			case'e':
-				srand((unsigned) time(&t));
-				rand_num = rand()%100;
-				if(rand_num%2 !=0)
-				    rand_num +=1;
-				printf("%d\n",rand_num);
-				break;
-			default:
-			//	printf("You chose wrong");
-				return 0;
-		}
-	}
+
+
 	return 0;
 }
+
