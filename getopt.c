@@ -37,7 +37,7 @@ int main(int argc, char **argv)
                     }
 				break;
 			case'u':
-			//	sprintf(hello,"GET /~%s HTTP/1.1\r\nHost:%s\r\n\r\n",optarg,argv[2]);
+				sprintf(hello,"GET /~%s HTTP/1.1\r\nHost:%s\r\n\r\n",optarg,argv[2]);
 				break;
 			case 'a':
 		     	sprintf(hello,"GET / HTTP/1.1\r\nHost:%s\r\nUser-Agent:%s\r\n\r\n",argv[2],optarg);
@@ -51,7 +51,7 @@ int main(int argc, char **argv)
 				{
                 while(fgets(string,sizeof(string),file))
                 {   
-				    // printf("%s\n",string);
+				     printf("%s\n",string);
 					sprintf(hello,"POST /~devrim/test.php HTTP/1.1\r\nHost:db.ciu.edu.tr \r\n\r\n","%s\n \n\r",string);
 	            }
 				}
@@ -62,14 +62,6 @@ int main(int argc, char **argv)
 				if (optopt == 'u'){
 				 sprintf(hello,"GET /~%s HTTP/1.1\r\nHost:%s\r\n\r\n",optarg,argv[2]);
             	}else
-				break;
-			case'd':
-				if(optarg != NULL)
-				 sprintf(hello, "POST /~devrim/test.php HTTP/1.1\r\nHost:db.ciu.edu.tr\r\n\r\n%s&%s\r\n",optarg,optarg);
-				break;
-			case'G':
-				if(optarg != NULL)
-				sprintf(hello,"GET /~devrim/test.php?%s&%s HTTP/1.1\r\nHost:db.ciu.edu.tr\r\n\r\n",optarg,optarg);
 				break;
 			case 'o':{
 				if(fileout = fopen(optarg,"w")){
@@ -94,6 +86,13 @@ int main(int argc, char **argv)
 				    fclose(fileout);
 			    	printf("\nResponse file has been written to <file:%s> instead of stdout.\n\n",optarg);
 			    	return 0;
+				break;
+			case'd':
+				 sprintf(hello, "POST /~devrim/test.php HTTP/1.1\r\nHost:db.ciu.edu.tr\r\n\r\n%s&%s\r\n",optarg,optarg);
+				break;
+			case'G':
+				if(optarg != NULL)
+				sprintf(hello,"GET /~devrim/test.php?%s&%s HTTP/1.1\r\nHost:db.ciu.edu.tr\r\n\r\n",optarg,optarg);
 				break;
 		    	}
 			default:
