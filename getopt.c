@@ -14,11 +14,10 @@
 
 int main(int argc, char **argv)
 {
-	int option_val =0,counter =0, rand_num;
+	int option_val =0;
 
 	FILE *file;
 	FILE *fileout;
-	time_t t;
 	char string[1000]= "";
 	int sock = 0, valread;
 	struct sockaddr_in serv_addr;
@@ -38,7 +37,7 @@ int main(int argc, char **argv)
 	                sprintf(hello,"GET / HTTP/1.1\r\nHost:%s\r\n\r\n",optarg);
                     }
 				break;
-			case'u': 
+			case'u':
 				sprintf(hello,"GET /~%s HTTP/1.1\r\nHost:%s\r\n\r\n",optarg,argv[2]);
 				break;
 			case 'a':
@@ -77,10 +76,11 @@ int main(int argc, char **argv)
 				    }
 				    send(sock , hello , strlen(hello) , 0 );
 				    valread = read( sock , buffer, 1024);
-				    printf("%s\n",buffer );
 					fprintf(fileout,"%s\n",buffer);
 				}
 				fclose(fileout);
+				printf("\nResponse file has been written to <file:%s> instead of stdout.\n\n",optarg);
+				return 0;
 				break;
 			}
 			case'?':
